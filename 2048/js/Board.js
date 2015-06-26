@@ -41,7 +41,7 @@ Board.prototype.setRandomTile = function() {
   // first find the available tiles, then pick one randomly
   var arr = this.availableTiles();
   if (arr.length == 0) {
-    alert("Game Over")
+    alert("Game Over");
   }
   var idx = Math.floor(Math.random()*arr.length);
   var cellIndex = arr[idx] // returns {x: x, y: y}
@@ -49,13 +49,13 @@ Board.prototype.setRandomTile = function() {
   return this.cells;
 }
 
-Board.prototype.eachCell = function(callback) {
-  for(x=0; x<4; x++) {
-    for(y=0; y<4; y++) {
-      // callback here
-    }
-  }
-}
+// Board.prototype.eachCell = function(callback) {
+//   for(x=0; x<4; x++) {
+//     for(y=0; y<4; y++) {
+//       // callback here
+//     }
+//   }
+// }
 
 Board.prototype.availableTiles = function() {
   // iterate through Board.cells and push cell if there is no Tile
@@ -132,69 +132,8 @@ Board.prototype.down = function(board) {
 
 Board.prototype.adjustCell = function(coordinates, direction, board) {
   // recursive function to move piece while there are no Tiles in front
-  if (board) {
-    var column = coordinates.y;
-    var row = coordinates.x;
-    var vertical = direction.vertical;
-    var horizontal = direction.horizontal;
 
-    if (horizontal == 1) {
-      while (column < 3) {
-        var tile = board[row][column];
-        column += horizontal;
-        var otherTile = board[row][column];
 
-        if (otherTile == 0) {
-          board[row][column - horizontal] == 0;
-          board[row][column] = tile;
-        } else if (otherTile.content == tile.content) {
-          board[row][column - horizontal] = 0;
-        }
-      }
-    } else if (horizontal == -1) {
-      while (column > 0) {
-        var tile = board[row][column];
-        column += horizontal;
-        var otherTile = board[row][column];
-
-        if (otherTile == 0) {
-          board[row][column - horizontal] == 0;
-          board[row][column] = tile;
-        } else if (otherTile.content == tile.content) {
-          board[row][column - horizontal] = 0;
-        }
-      }
-    } else if (vertical == 1) {
-      while (row < 3) {
-        // save variables
-        var tile = board[row][column];
-        row += vertical;
-        var otherTile = board[row][column];
-        // move over if empty, or merge
-        if (otherTile == 0) {
-          board[row - vertical][column] = 0;
-          board[row][column] = tile;
-        } else if (otherTile.content == tile.content) {
-          board[row - vertical][column] = 0;
-        }
-      }
-    } else if (vertical == -1) {
-      while (row > 0) {
-        // save variables
-        var tile = board[row][column];
-        row += vertical;
-        var otherTile = board[row][column];
-        // move over if empty, or merge
-        if (otherTile == 0) {
-          board[row - vertical][column] = 0;
-          board[row][column] = tile;
-        } else if (otherTile.content == tile.content) {
-          board[row - vertical][column] = 0;
-        }
-      }
-    } return board;
-
-  } else {
     var column = coordinates.y;
     var row = coordinates.x;
     this.cells[row][column].moves += 1;
@@ -213,6 +152,9 @@ Board.prototype.adjustCell = function(coordinates, direction, board) {
           this.cells[row][column] = tile;
 
         } else if (otherTile.content == tile.content) {
+          if () {  // the previous tile was not already modified )
+
+          }
           this.cells[row][column - horizontal] = 0;
           this.cells[row][column].content *= 2;
           this.cells[row][column].color += 1;
@@ -274,7 +216,6 @@ Board.prototype.adjustCell = function(coordinates, direction, board) {
           this.score += this.cells[row][column].content;
         }
       }
-    }
     return this.cells;
   }
 }
