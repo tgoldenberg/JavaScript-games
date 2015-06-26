@@ -4,6 +4,7 @@ var Tile = function(content) {
   this.content = content || 2;
   this.color = 0;
   this.moves = 0;
+  this.canMerge = true;
   this.movingDirection = "";
   this.setColor = function() {
     if (this.color >= COLORS.length) {
@@ -72,6 +73,11 @@ Board.prototype.availableTiles = function() {
 
 // basic function which hands off to specific directional functions
 Board.prototype.move = function(direction) {
+  for(x=0; x<4; x++) {
+    for(y=0; y<4; y++) {
+      this.cells[x][y].canMerge = true;
+    }
+  }
   switch(direction) {
     case "right":
       this.right(this.cells);
@@ -152,13 +158,15 @@ Board.prototype.adjustCell = function(coordinates, direction, board) {
           this.cells[row][column] = tile;
 
         } else if (otherTile.content == tile.content) {
-          if () {  // the previous tile was not already modified )
+          if (tile.canMerge && this.cells[row][column].canMerge) {  // the previous tile was not already modified )
+            this.cells[row][column - horizontal] = 0;
+            this.cells[row][column].content *= 2;
+            this.cells[row][column].color += 1;
+            this.score += this.cells[row][column].content;
+            this.cells[row][column].canMerge = false;
 
           }
-          this.cells[row][column - horizontal] = 0;
-          this.cells[row][column].content *= 2;
-          this.cells[row][column].color += 1;
-          this.score += this.cells[row][column].content;
+
         }
       }
     } else if (vertical == 1) {
@@ -173,11 +181,15 @@ Board.prototype.adjustCell = function(coordinates, direction, board) {
           this.cells[row - vertical][column] = 0;
           this.cells[row][column] = tile;
         } else if (otherTile.content == tile.content) {
-          this.cells[row - vertical][column] = 0;
-          this.cells[row][column].content *= 2;
-          this.cells[row][column].color += 1;
+          if (tile.canMerge && this.cells[row][column].canMerge) {
+            this.cells[row - vertical][column] = 0;
+            this.cells[row][column].content *= 2;
+            this.cells[row][column].color += 1;
 
-          this.score += this.cells[row][column].content;
+            this.score += this.cells[row][column].content;
+            this.cells[row][column].canMerge = false;
+          }
+
         }
       }
     } else if (vertical == -1) {
@@ -192,10 +204,14 @@ Board.prototype.adjustCell = function(coordinates, direction, board) {
           this.cells[row - vertical][column] = 0;
           this.cells[row][column] = tile;
         } else if (otherTile.content == tile.content) {
-          this.cells[row - vertical][column] = 0;
-          this.cells[row][column].content *= 2;
-          this.cells[row][column].color += 1;
-          this.score += this.cells[row][column].content;
+          if (tile.canMerge && this.cells[row][column].canMerge) {
+            this.cells[row - vertical][column] = 0;
+            this.cells[row][column].content *= 2;
+            this.cells[row][column].color += 1;
+            this.score += this.cells[row][column].content;
+            this.cells[row][column].canMerge = false;
+          }
+
         }
       }
     } else if (horizontal == -1) {
@@ -210,11 +226,18 @@ Board.prototype.adjustCell = function(coordinates, direction, board) {
           this.cells[row][column] = tile;
           tile.moves += 1;
         } else if (otherTile.content == tile.content) {
-          this.cells[row][column - horizontal] = 0;
-          this.cells[row][column].content *= 2;
-          this.cells[row][column].color += 1;
-          this.score += this.cells[row][column].content;
+          console.log(this.cells[row][column].canMerge);
+          if (tile.canMerge && this.cells[row][column].canMerge) {
+
+            this.cells[row][column - horizontal] = 0;
+            this.cells[row][column].content *= 2;
+            this.cells[row][column].color += 1;
+            this.score += this.cells[row][column].content;
+            this.cells[row][column].canMerge = false;
+          }
+
         }
+
       }
     return this.cells;
   }
