@@ -9,7 +9,7 @@ var setBoard = function() {
         var rowClass = ".row-" + y;
         var columnClass = ".column-" + x;
         $(columnClass).find(rowClass).addClass("shiny").html("<span>" + content + "</span>").css("background", board.cells[x][y].setColor());
-        if (board.cells[x][y].moves == 0) {
+        if (board.cells[x][y].moves == 0 || board.cells[x][y].canMerge == false) {
           $(columnClass).find(rowClass).addClass("bounceIn");
         }
       }
